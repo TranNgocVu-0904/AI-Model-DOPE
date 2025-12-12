@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Realtime 6D pose with DOPE + Intel RealSense
+# Realtime 6D pose with DOPE + Intel RealSense + Socket sender
 # deps: pip install opencv-contrib-python pyrealsense2 pillow numpy pyyaml simplejson
 
 import argparse
@@ -7,6 +7,7 @@ import time
 import math
 import sys
 import os
+import socket   # <-- thêm cho socket
 
 import numpy as np
 import cv2
@@ -14,12 +15,58 @@ from PIL import Image
 import pyrealsense2 as rs
 import yaml
 
+# ==== SOCKET CONFIG (Device 2 / ROS bridge) ====
+ROS_IP = '172.16.130.140'  # IP máy nhận (chạy dope_bridge.py hoặc ROS-node)
+ROS_PORT = 5005            # Port phải trùng với bridge/server
+SEND_DELAY = 0.5           # Gửi tối đa 2 lần/giây để đỡ lag
+last_sent_time = 0.0
+# ==============================================
+
 # ==== import từ DOPE common ====
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", "common"))
 from cuboid import Cuboid3d
 from cuboid_pnp_solver import CuboidPNPSolver
 from detector import ModelData, ObjectDetector
 from utils import Draw
+
+
+# ===== Helper: gửi pose qua socket =====
+def send_to_ros(location, quaternion):
+    """
+    Gửi pose dạng: x,y,z,qx,qy,qz,qw qua TCP socket tới ROS bridge.
+    location: np.array hoặc list [x, y, z]
+    quaternion: np.array hoặc list [qx, qy, qz, qw] (hoặc [w,x,y,z] tuỳ DOPE, bạn tự thống nhất bên receiver)
+    """
+    global last_sent_time
+
+    now = time.time()
+    if now - last_sent_time < SEND_DELAY:
+        return  # chưa đủ thời gian, skip frame này
+
+    try:
+        msg = (
+            f"{location[0]:.4f},{location[1]:.4f},{location[2]:.4f},"
+            f"{quaternion[0]:.4f},{quaternion[1]:.4f},"
+            f"{quaternion[2]:.4f},{quaternion[3]:.4f}"
+        )
+
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            s.settimeout(0.2)  # timeout nhanh để không treo frame
+            s.connect((ROS_IP, ROS_PORT))
+            s.sendall(msg.encode("utf-8"))
+
+        print(f"[NET] Sent to ROS: {msg}")
+        last_sent_time = now
+
+    except ConnectionRefusedError:
+        print(f"[NET] Connection refused: server {ROS_IP}:{ROS_PORT} chưa chạy?")
+    except socket.timeout:
+        print(f"[NET] Error: timed out khi gửi tới {ROS_IP}:{ROS_PORT}")
+    except Exception as e:
+        print(f"[NET] Error: {e}")
+
+
+# ========================================
 
 
 class DopeRealtime:
@@ -230,7 +277,7 @@ def main():
                 loc = r0["location"]          # [x, y, z] (m)
                 quat = r0["quaternion"]       # [x, y, z, w] hoặc tương tự (xyzw)
 
-                # In ra tọa độ
+                # 1) In ra tọa độ như file đầu
                 print(
                     "Pose:",
                     "x={:.3f} m".format(loc[0]),
@@ -239,8 +286,10 @@ def main():
                     "| quat =", ["{:.3f}".format(q) for q in quat],
                 )
 
-                # Vẽ trục tọa độ đơn giản (tùy chọn)
-                cx, cy = int(vis_bgr.shape[1] / 2), int(vis_bgr.shape[0] / 2)
+                # 2) Gửi qua socket như file thứ hai
+                send_to_ros(loc, quat)
+
+                # Vẽ text lên frame
                 cv2.putText(
                     vis_bgr,
                     f"x={loc[0]:.2f} y={loc[1]:.2f} z={loc[2]:.2f} (m)",

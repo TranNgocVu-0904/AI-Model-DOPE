@@ -1,8 +1,8 @@
- # AI-Model-Using-DOPE
+ # AI-Model-DOPE
 
 
 ```bash
-git clone https://github.com/TranNgocVu-0904/AI-Model-Using-DOPE.git
+git clone https://github.com/TranNgocVu-0904/AI-Model-DOPE.git
 ```
 
 
@@ -12,7 +12,7 @@ git clone https://github.com/TranNgocVu-0904/AI-Model-Using-DOPE.git
 
 
 ```bash
-cd ~/AI-Model-Using-DOPE/Deep_Object_Pose
+cd AI-Model-DOPE/Deep_Object_Pose
 pip install -r requirements.txt
 ```
 Hạ NumPy xuống < 2
@@ -37,34 +37,15 @@ pip install pyrealsense2           # cần cho camera RealSense
 </pre>
 
 
+Từ root repository (AI-Model-DOPE): 
 
 
-
-### Chạy realtime
-
-Nếu muốn chỉnh sửa file realtime_dope_realsense.py (lấy tọa độ realtime) để thêm socket và địa chỉ IP:
-
-```bash
-cd ~/AI-Model-Using-DOPE/Deep_Object_Pose/realtime
-open realtime_dope_realsense.py
-```
-rồi chỉnh sửa
-
-Từ root repository:
-
-
-```bash
-cd ~/AI-Model-Using-DOPE/Deep_Object_Pose
-```
-
-Cần có file final_net_cube_6cm_0030.pth để chạy được DOPE model:
-
-[Tải File Model DOPE AI](https://drive.google.com/file/d/1fKnnWy36cJvyrl-w-5_T44c_w5oWR4Fu/view?usp=sharing)
+Cần có file final_net_cube_6cm_0030.pth để chạy được DOPE model: [Tải File Model DOPE AI](https://drive.google.com/file/d/1fKnnWy36cJvyrl-w-5_T44c_w5oWR4Fu/view?usp=sharing)
 
 Tải về rồi cho vào thư mục:
 
 ```bash
-~/AI-Model-Using-DOPE/output_cube_6cm/
+output_cube_6cm
 ```
 
 Nếu weight được train bằng DDP (state_dict có prefix "module.") thì thêm --parallel:
