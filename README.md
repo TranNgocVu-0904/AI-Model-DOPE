@@ -60,7 +60,7 @@ cd ~/AI-Model-Using-DOPE/Deep_Object_Pose
 Cần có file final_net_cube_6cm_0030.pth để chạy được DOPE model:
 
 ```bash
-[File Model DOPE AI ](https://drive.google.com/file/d/1fKnnWy36cJvyrl-w-5_T44c_w5oWR4Fu/view usp=sharing)
+[File Model DOPE AI](https://drive.google.com/file/d/1fKnnWy36cJvyrl-w-5_T44c_w5oWR4Fu/view usp=sharing)
 ```
 Tải về rồi cho vào thư mục:
 
