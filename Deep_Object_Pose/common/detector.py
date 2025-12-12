@@ -28,6 +28,9 @@ from models import *
 # Import the definition of the neural network model and cuboids
 from cuboid_pnp_solver import *
 
+# ==== CHỌN DEVICE (cuda nếu có, không thì cpu) ====
+DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
 
 # global transform for image input
 transform = transforms.Compose(
@@ -256,16 +259,22 @@ class ModelData(object):
         """Loads network model from disk with given path"""
         model_loading_start_time = time.time()
         print("Loading DOPE model '{}'...".format(path))
-        net = DopeNetwork().cuda()
-        state_dict = torch.load(path)
+
+        # Tạo network và đưa lên đúng device
+        net = DopeNetwork().to(DEVICE)
+
+        # Load weight đúng device (cpu hoặc cuda)
+        state_dict = torch.load(path, map_location=DEVICE)
 
         if self.parallel:
-            # we must alter the layer names
-            new_state_dict = OrderedDict()
-            for k,v in state_dict.items():
-                name = k[7:] # remove `module.`
-                new_state_dict[name] = v
-            state_dict = new_state_dict
+            # Nếu weight được train bằng DataParallel (có prefix `module.`)
+            has_module_prefix = any(k.startswith("module.") for k in state_dict.keys())
+            if has_module_prefix:
+                new_state_dict = OrderedDict()
+                for k, v in state_dict.items():
+                    name = k[7:]  # remove `module.`
+                    new_state_dict[name] = v
+                state_dict = new_state_dict
 
         net.load_state_dict(state_dict)
         net.eval()
@@ -471,11 +480,14 @@ class ObjectDetector(object):
         print("detect_object_in_image - image shape: {}".format(in_img.shape))
 
         # Run network inference
-        image_tensor = transform(in_img)
-        image_torch = Variable(image_tensor).cuda().unsqueeze(0)
-        out, seg = net_model(
-            image_torch
-        )  # run inference using the network (calls 'forward' method)
+        image_tensor = transform(in_img)          # H,W,3 (numpy) -> C,H,W (tensor)
+        # Thêm batch dimension và chuyển sang đúng device
+        image_torch = image_tensor.unsqueeze(0).to(DEVICE)
+
+        # Inference không cần gradient cho nhẹ
+        with torch.no_grad():
+            out, seg = net_model(image_torch)  # run inference using the network
+
         vertex2 = out[-1][0]
         aff = seg[-1][0]
 
