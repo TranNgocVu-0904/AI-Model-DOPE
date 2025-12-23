@@ -37,15 +37,18 @@ pip install pyrealsense2           # cần cho camera RealSense
 </pre>
 
 
-Từ root repository (AI-Model-DOPE): 
+Từ root repository (AI-Model-DOPE):
 
+```bash
+cd Deep-Object-Pose
+```
 
 Cần có file final_net_cube_6cm_0030.pth để chạy được DOPE model: [Tải File Model DOPE AI](https://drive.google.com/file/d/1fKnnWy36cJvyrl-w-5_T44c_w5oWR4Fu/view?usp=sharing)
 
 Tải về rồi cho vào thư mục:
 
 ```bash
-output_cube_6cm
+weights
 ```
 
 Nếu weight được train bằng DDP (state_dict có prefix "module.") thì thêm --parallel:
@@ -53,6 +56,6 @@ Nếu weight được train bằng DDP (state_dict có prefix "module.") thì th
 
 ```bash
 
-python realtime/realtime_dope_realsense.py --weights /AI-Model-Using-DOPE/output_cube_6cm/final_net_cube_6cm_0030.pth --config config/config_pose_cube_6cm.yaml --object cube_6cm --parallel
+python realtime/realtime_dope_realsense.py --weights /weights/final_net_cube_6cm_0030.pth --config config/config_pose_cube_6cm.yaml --object cube_6cm --parallel
 
 ```
