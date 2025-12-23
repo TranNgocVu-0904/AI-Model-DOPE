@@ -40,7 +40,7 @@ From root repository (AI-Model-DOPE):
 cd Deep-Object-Pose
 ```
 
-The final_net_cube_6cm_0030.pth file is needed to run the DOPE model: [Download DOPE AI Model File](https://drive.google.com/file/d/1fKnnWy36cJvyrl-w-5_T44c_w5oWR4Fu/view?usp=sharing)
+The final_net_cube_6cm_0030.pth file is needed to run the DOPE model: [Download DOPE AI Model File](https://drive.google.com/drive/folders/1wQ5EPUMy37dbofn4g7YrulYI6OAYfwDT?usp=sharing)
 
 Download and place it in the folder:
 
