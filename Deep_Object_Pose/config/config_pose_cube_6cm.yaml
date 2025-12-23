@@ -1,0 +1,16 @@
+input_is_rectified: true
+downscale_height: 480
+
+thresh_angle: 0.5
+thresh_map: 0.01
+sigma: 3
+thresh_points: 0.1
+
+draw_colors:
+  cube_6cm: [0, 255, 0]
+
+dimensions:
+  cube_6cm: [0.06, 0.06, 0.06]
+
+class_ids:
+  cube_6cm: 1

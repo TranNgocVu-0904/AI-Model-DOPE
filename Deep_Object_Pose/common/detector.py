@@ -28,7 +28,7 @@ from models import *
 # Import the definition of the neural network model and cuboids
 from cuboid_pnp_solver import *
 
-# ==== CHỌN DEVICE (cuda nếu có, không thì cpu) ====
+# ==== SELECT DEVICE (CUDA if available, CPU otherwise) ====
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
