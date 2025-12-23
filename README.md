@@ -8,10 +8,9 @@ git clone https://github.com/TranNgocVu-0904/AI-Model-DOPE.git
 
 **GPU (CUDA) support**: If you have an **NVIDIA GPU**, you can run **DOPE** with **CUDA** for significantly faster inference.
 
-**CPU support (modified)**: In this repository, we modified the original upstream source code so that the realtime pipeline can also run on **CPU-only machines** (without **CUDA**). This is useful for users who do not have an **NVIDIA GPU**.
+**CPU support (modified)**: In this repository, we modified the original upstream source code so that the realtime pipeline can also run on **CPU-only machines** (without **CUDA**). This is useful for users who do not have an **NVIDIA GPU**. Obviously, performance will not be as good as when running on NVIDIA GPU.
 
 **MacOS users**: Since the RealSense + ROS/DOPE pipeline is typically developed and tested on **Linux**, MacOS users are recommended to run the project inside an **Ubuntu Virtual Machine** (e.g., UTM/VMware/VirtualBox). With an **Ubuntu VM**, you can run the CPU version and reproduce the same environment as on Linux.
-
 ## Realtime detection with Intel RealSense
 
 ### Install requirements (remove unnecessary ones if errors occur)
