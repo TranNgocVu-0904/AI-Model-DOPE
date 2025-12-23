@@ -60,6 +60,6 @@ If weights are trained using DDP (state_dict has the prefix "module."), add --pa
 
 ```bash
 
-python realtime/realtime_dope_realsense.py --weights /weights/final_net_cube_6cm_0030.pth --config config/config_pose_cube_6cm.yaml --object cube_6cm --parallel
+python realtime/realtime_dope_realsense.py --weights weights/final_net_cube_6cm_0030.pth --config config/config_pose_cube_6cm.yaml --object cube_6cm --parallel
 
 ```
