@@ -62,3 +62,8 @@ If weights are trained using DDP (state_dict has the prefix "module."), add --pa
 python realtime/realtime_dope_realsense.py --weights weights/final_net_cube_6cm_0030.pth --config config/config_pose_cube_6cm.yaml --object cube_6cm --parallel
 
 ```
+## About the dataset
+
+We provide a small sample of the dataset we used for training, including **100 RGB images** and **100 corresponding JSON annotation files** (one JSON per image) following the DOPE cuboid annotation format.
+
+Please note that this sample is only meant for **reference and demonstration**. In practice, training a DOPE model typically requires **at least ~10,000 images** and **~10,000 matching JSON annotations** to achieve stable and accurate performance.
