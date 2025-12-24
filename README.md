@@ -68,3 +68,16 @@ python realtime/realtime_dope_realsense.py --weights weights/final_net_cube_6cm_
 We provide a small sample of the dataset we used for training, including **100 RGB images** and **100 corresponding JSON annotation files** (one JSON per image) following the DOPE cuboid annotation format.
 
 Please note that this sample is only meant for **reference and demonstration**. In practice, training a DOPE model typically requires **at least ~10,000 images** and **~10,000 matching JSON annotations** to achieve stable and accurate performance.
+
+## 🏋️ Training the DOPE model
+
+If you have an **NVIDIA GPU with CUDA**, you can explore training DOPE locally with CUDA for faster training.
+
+However, if you do not have CUDA (or you want an easier setup), we recommend training on cloud platforms such as:
+
+- ☁️ **Google Colab**
+- 🧪 **Kaggle (recommended)**
+
+These platforms provide free/paid GPU resources and make training more convenient.
+
+🔗 **My Kaggle training notebook / profile:** [My Kaggle notebook](https://www.kaggle.com/code/vtrnngc/ai-dope-model)
