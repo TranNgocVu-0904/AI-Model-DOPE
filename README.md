@@ -1,5 +1,7 @@
 # 🖥️ AI-Model-DOPE
 
+To run our group's AI model, please follow these step:
+
 ```bash
 git clone https://github.com/TranNgocVu-0904/AI-Model-DOPE.git
 ```
